@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AgriNegotiate: fair prices on a bad signal</title>
+<meta name="description" content="AgriNegotiate is a machine learning project by Harshita and Jasmeen. We trained software agents to negotiate for small farmers over unreliable phone links, and measured whether the deals were fair.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f2ecdc'/%3E%3Cpath d='M16 28V12' stroke='%238a6a2c' stroke-width='2' fill='none'/%3E%3Cellipse cx='16' cy='9' rx='3.5' ry='6.5' fill='%23b8851f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <a class="brand" href="#top">AgriNegotiate</a>
+  <ul>
+    <li><a href="#intro">Idea</a></li>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#how">Negotiation</a></li>
+    <li><a href="#simulator">Simulator</a></li>
+    <li><a href="#learning">Learning</a></li>
+    <li><a href="#measure">Method</a></li>
+    <li><a href="#findings">Results</a></li>
+    <li><a href="#limits">Roadmap</a></li>
+  </ul>
+</nav>
+<div class="hero" id="top">
+  <canvas id="herofield" aria-hidden="true"></canvas>
+  <div class="txt">
+    <h1>Fair prices on a bad signal</h1>
+    <p class="deck">A small farmer often negotiates blind: no market data, a phone that drops out, and a buyer who knows exactly what the going rate is. We trained software agents to bargain on the farmer's behalf, then measured honestly whether the deals came out fair.</p>
+  </div>
+</div>
+
+<div class="shell">
+<main>
+
+<section id="intro">
+  <p class="lede">Here is the idea in a minute. Two people have to agree on a price, and each keeps their own limit secret. We gave each side a small neural network and let the two negotiate against each other thousands of times in a simulated market, until both got good at it.</p>
+  <p>Then we asked the questions that matter to a real farmer. Do the agents reach a deal at all? Is the split fair? And what happens when the phone line drops halfway through?</p>
+  <div class="short">
+    <p class="notice">In short</p>
+    <p>The agents learn to trade efficiently, but the farmer usually walks away with about a quarter of the gain instead of half. Perishable crops make that worse, and so does having three farmers compete for one buyer.</p>
+    <p>An adaptive fee on unfair deals does help the farmer. A plain price floor helps more and costs less, until buyers differ widely, where that lead disappears. A weak signal hurts badly, and giving the agents a memory did not fix it. Three of our five hypotheses did not hold up, and we report them exactly as they came out.</p>
+  </div>
+</section>
+
+<section id="problem">
+  <h2><span class="n">1</span>The problem</h2>
+  <p class="lede">A farmer has a sack of tomatoes that will not keep. The buyer in the town market knows today's price. The farmer, on a phone that works half the time, does not.</p>
+  <figure class="wide">
+    <svg id="fig-problem" viewBox="0 0 900 270" role="img" aria-label="A farmer on the left and a buyer on the right, separated by a weak phone signal"></svg>
+    <figcaption><b>Fig. 1</b>The setting. Two sides, one price and a link that drops. Neither side can see the other's limit.</figcaption>
+  </figure>
+  <p>Every farmer has a fallback: the price they could get elsewhere, or what the crop is worth after it spoils. Every buyer has a value: the most the goods are worth to them. Any price between the two leaves both better off. The real question is where in that gap the price lands.<span class="note">Economists call the size of that gap the gains from trade. We just call it the gain.</span></p>
+  <p>People settle this with experience, pressure and inside information. A farmer without those three starts at a disadvantage. If software agents can learn to negotiate well, they could level that out. That leaves two questions: can the agents learn to trade at all, and can they learn to split the gain fairly?</p>
+  <p>We think this matters most for farmers who sell to a single trader, in markets where one side knows far more than the other, and for anyone designing a platform that is supposed to be fair.</p>
+  <p>Early on we were asked a fair question: better than what? A result means little without a benchmark. So we built the yardstick first, before training anything. Section 5 explains it.</p>
+</section>
+
+<section id="how">
+  <h2><span class="n">2</span>How a negotiation works</h2>
+  <p>One farmer and one buyer take turns over at most 30 steps. On each turn a side can do one of four things.</p>
+  <dl class="dl">
+    <dt>Offer a price</dt><dd>Choose one of 21 prices on a grid from 0.20 to 1.20. The offer stays open for six steps, then lapses.</dd>
+    <dt>Accept</dt><dd>Take the other side's open offer. The deal is done at that price.</dd>
+    <dt>Walk away</dt><dd>End the talks and take the fallback.</dd>
+    <dt>Wait</dt><dd>Do nothing this turn. A dropped signal often forces this.</dd>
+  </dl>
+  <p>The farmer sees only their own fallback and the buyer's offers. The buyer sees only their own value and the farmer's offers. That hidden information is what makes it a negotiation and not a calculation.</p>
+
+  <h3>A worked example</h3>
+  <p>Say the farmer's fallback is <span class="num">800</span> rupees a quintal and the buyer's value is <span class="num">1,300</span>. The gain is <span class="num">500</span>. A price of <span class="num">1,050</span> splits it evenly; we call that the Nash price. A price of <span class="num">930</span> gives the farmer 130 of the 500, a 26 percent share, which is close to what our trained agents settle on.</p>
+  <figure class="wide">
+    <svg id="fig-example" viewBox="0 0 820 300" role="img" aria-label="Offers converge from both sides toward a price of 1050"></svg>
+    <figcaption><b>Fig. 2</b>An invented example. The farmer opens high and the buyer opens low, and each gives ground until someone accepts. Where the deal lands inside the shaded gap is the fairness question.</figcaption>
+  </figure>
+
+  <h3>What a bad signal does</h3>
+  <p>When the link is down, the farmer can neither send nor read messages. A buyer's offer can expire unseen, and an acceptance can arrive too late.<span class="note">The link switches on and off at random, with outages averaging two steps. We vary how much of the time it is up.</span> The next section lets you turn the signal down and watch deals fall apart.</p>
+</section>
+
+<section id="simulator">
+  <h2><span class="n">3</span>Try it yourself</h2>
+  <p>This is a simplified one-farmer, one-buyer version of our simulator, running right in your browser. The strategies are the scripted ones from our baselines. You can also take either side yourself against a scripted opponent.</p>
+  <p class="notice">Pick a farmer and a buyer, press Play, and watch the offers close in on each other.</p>
+
+  <div class="wide">
+    <div class="tabs" id="simtabs">
+      <button class="on" data-tab="live">Run a negotiation</button>
+      <button data-tab="replay">Replay a learned-agent episode</button>
+    </div>
+
+    <div id="tab-live" class="sim">
+      <div class="controls">
+        <label>Farmer<select id="sFarmer"></select></label>
+        <label>Buyer<select id="sBuyer"></select></label>
+        <label>Phone link<select id="sLink">
+          <option value="1">Always up</option>
+          <option value="0.6">Up 60% of the time</option>
+          <option value="0.4">Up 40% of the time</option></select></label>
+        <label>Platform rule<select id="sRule">
+          <option value="none">None</option>
+          <option value="floor">Price floor</option>
+          <option value="fee">Fairness fee</option></select></label>
+        <label>Farmer fallback <span class="num" id="vF">0.40</span><input type="range" id="sF" min="0.25" max="0.70" step="0.05" value="0.40"></label>
+        <label>Buyer value <span class="num" id="vV">1.00</span><input type="range" id="sV" min="0.80" max="1.20" step="0.05" value="1.00"></label>
+      </div>
+      <div class="controls">
+        <button class="go" id="bPlay">Play</button>
+        <button id="bStep">Step</button>
+        <button id="bReset">New draw</button>
+        <span style="font:14px var(--sans);color:var(--ink3)">Time <span class="num" id="vT">0</span> of 30</span>
+      </div>
+      <svg id="simsvg" viewBox="0 0 740 330" role="img" aria-label="Offers over time"></svg>
+      <div class="human" id="human"></div>
+      <div class="readout" id="readout"></div>
+      <div class="log" id="log"></div>
+    </div>
+
+    <div id="tab-replay" class="sim" style="display:none">
+      <div class="controls">
+        <label>Episode<select id="rSel"></select></label>
+        <button class="go" id="rPlay">Play</button>
+        <button id="rReset">Reset</button>
+      </div>
+      <p id="rNote" style="font:15px/1.5 var(--sans);color:var(--ink2);margin:0 0 .6rem"></p>
+      <svg id="rsvg" viewBox="0 0 740 330" role="img" aria-label="Recorded episode"></svg>
+      <div class="readout" id="rread"></div>
+    </div>
+    <figcaption style="margin-top:.7rem"><b>Fig. 3</b>Solid dots are the farmer's offers and hollow dots are the buyer's. The shaded band is the gap between the two private values, and the gold diamond marks the deal. The strip under the chart shows when the farmer's phone link was up.</figcaption>
+  </div>
+
+  <p>A few things worth trying. Set the buyer to Hardball and the farmer to Linear, and see who keeps the gain. Drop the link to 40 percent and watch offers expire unread. Switch the rule to Price floor and see how it moves the final price.<span class="note">In this browser version the scripted agents ignore the fairness fee, so it only shows what the buyer would be charged. The learned agents in the replay tab did adapt to it.</span></p>
+</section>
+
+<section id="learning">
+  <h2><span class="n">4</span>How the agents learn</h2>
+  <p class="lede">Each side is a small neural network. It reads 22 numbers, picks one of 24 actions, and is rewarded only by the gain it ends up with. Nobody tells it how to bargain.</p>
+
+  <figure class="wide"><svg id="fig-net" viewBox="0 0 860 330" role="img" aria-label="Network diagram from 22 inputs through two hidden layers to 24 masked action logits"></svg>
+    <figcaption><b>Fig. 4</b>One agent's policy network. The moving dashes are illustrative: they show the direction of the computation, not real activations. In the delay-aware version the second layer is replaced by a 64-unit GRU, which gives the agent a memory.</figcaption></figure>
+
+  <h3>What an agent sees and can do</h3>
+  <dl class="dl">
+    <dt>It sees 22 numbers</dt><dd>Time left, its deadline, its own walk-away value, the other side's latest price and how old it is, its own open offer and whether it was delivered, whether the link is up, and how many talks are open. The buyer also sees the fee rate and the fee target.</dd>
+    <dt>It chooses 1 of 24</dt><dd>Twenty-one prices, accept, walk away or wait. A mask blocks illegal moves, such as accepting when no offer is open, so the network never wastes probability on them.</dd>
+    <dt>It is rewarded by</dt><dd>Its own gain when the talks end, minus a small cost for each step of delay. Nothing is discounted, so only the final outcome counts.</dd>
+  </dl>
+
+  <h3>The learning rule</h3>
+  <p>We use independent PPO. The farmer network and the buyer network each improve from their own experience while the other keeps changing. In every batch, 30 percent of the episodes pair a learner with a scripted opponent (Boulware, Linear, Conceder or tit-for-tat). That stops the two networks from only learning to exploit each other's habits.<span class="note">Settings: learning rate 3e-4 falling linearly, clip 0.2, GAE 0.95, four epochs of four minibatches, entropy bonus falling from 0.01 to 0.001, 64 hidden units.</span></p>
+  <p>One early failure shaped the design. In three of ten perishable-crop runs, the agents decided walking away was the safest move and never traded again. Lowering the starting probability of walking away fixed it.</p>
+
+  <h3>Putting fairness into the loss</h3>
+  <p>We treat fairness as a constraint. When a deal lands below a fair target price, the buyer pays a fee. The fee rate, called lambda, is not set by hand. It rises while buyers keep pushing prices too low and eases off when they stop. This is a standard technique for constrained reinforcement learning, known as dual ascent.</p>
+  <div class="formula">fee = lambda x max(0, target price - deal price)<br>target price = farmer fallback + 0.4 x gain<br>buyer advantage = reward advantage - lambda x cost advantage<br>lambda &larr; clip( lambda + eta x (average shortfall - 0.02), 0, 5 ), eta = 0.05</div>
+
+  <p class="notice">Press Play and watch lambda climb as the farmer's share rises. Choose the price floor to see a run with no lambda at all.</p>
+  <div class="wide sim" id="train">
+    <div class="controls">
+      <label>Training run<select id="tSel"></select></label>
+      <button class="go" id="tPlay">Play</button>
+      <span style="font:14px var(--sans);color:var(--ink3)">Checkpoint <span class="num" id="tCk">0</span></span>
+    </div>
+    <input type="range" id="tScrub" min="0" max="10" value="0" style="width:100%">
+    <svg id="tsvg" viewBox="0 0 740 320" role="img" aria-label="Training curves"></svg>
+    <div class="readout" id="tRead"></div>
+    <div class="legend"><span style="--c:var(--ink)">Efficiency</span><span style="--c:var(--clay)">Farmer share</span><span style="--c:var(--leaf)">Deal rate</span><span style="--c:var(--wheat)">Fee rate (lambda)</span></div>
+    <figcaption><b>Fig. 5</b>Each checkpoint is an evaluation on 300 fixed episodes, averaged over the training runs of that setting. The fee rate has its own panel underneath.</figcaption>
+  </div>
+  <p>The curves tell the story of the method. Efficiency climbs fast, because trading is easy to learn. The farmer's share barely moves unless something pushes it. That gap is the whole project in one picture.</p>
+</section>
+
+<section id="measure">
+  <h2><span class="n">5</span>How we measured</h2>
+  <p>"Better than what?" needs a concrete answer. We use three fixed reference points and four numbers, and we report each result with its uncertainty.</p>
+
+  <h3>Reference points</h3>
+  <dl class="dl">
+    <dt>Walk away</dt><dd>Nobody trades, so efficiency is zero. This is the floor.</dd>
+    <dt>Fair split</dt><dd>A reference that can see both private values and splits the gain evenly. It cheats by design, and it marks the ceiling.</dd>
+    <dt>Scripted agents</dt><dd>Classic negotiation tactics: Linear, Boulware (holds out), Conceder (gives in early), random offers, tit-for-tat and hardball. This is the competition a learner has to beat.</dd>
+  </dl>
+
+  <h3>The four numbers</h3>
+  <dl class="dl">
+    <dt>Efficiency</dt><dd>How much of the available gain the two sides captured together. A score of one means none was wasted.</dd>
+    <dt>Farmer share</dt><dd>The farmer's part of the gain that was captured. We call 0.5 fair. It is undefined when almost nothing was traded.</dd>
+    <dt>Agreement rate</dt><dd>How often a pair reached a deal at all.</dd>
+    <dt>Nash distance</dt><dd>How far the price landed from the even split.</dd>
+  </dl>
+  <div class="formula">efficiency = (farmer gain + buyer gain) / largest possible gain<br>farmer share = farmer gain / (farmer gain + buyer gain)</div>
+
+  <h3>How sure we are</h3>
+  <p>We train each setting several times from different random starts. For every setting we plot each run as a dot, mark the interquartile mean, and draw a 95 percent bootstrap interval. With three to five runs the interval is wide, so we label those results exploratory.<span class="note">The interquartile mean drops the best and worst quarter of runs, so one lucky or failed run cannot move it much.</span></p>
+  <figure class="wide">
+    <div id="tbl-ref"></div>
+    <figcaption><b>Table 1</b>Scripted agents in the equal-conditions market, with the same strategy on both sides. Each row comes from 1,000 simulated episodes.</figcaption>
+  </figure>
+</section>
+
+<section id="findings">
+  <h2><span class="n">6</span>What we found</h2>
+  <p class="lede">We wrote down five hypotheses and our success thresholds before running the experiments. One held, one held in part, and three failed.</p>
+
+  <div class="finding">
+    <span class="verdict failed">Failed<i>H1 &middot; 10 runs</i></span>
+    <h3>Equal conditions do not give equal splits</h3>
+    <p>With both sides on equal footing, the learners trade efficiently (efficiency 0.84, interval 0.83 to 0.86). But the farmer's share is nowhere near one half. In eight of ten runs it settles around 0.26, and in two it sits near 0.65.</p>
+    <p class="notice">Look at the equal-conditions row: the dots form two clusters, not one.</p>
+    <figure class="wide"><div id="fig-h1"></div>
+      <figcaption><b>Fig. 6</b>Farmer share in five market settings. Each dot is one trained run, the tick is the interquartile mean and the bar is the 95% interval. The dashed line marks an equal split. A perishable crop and three farmers per buyer are both clearly lower than equal conditions.</figcaption></figure>
+  </div>
+
+  <div class="finding">
+    <span class="verdict mixed">Held for two of four<i>H2 &middot; 5 to 10 runs</i></span>
+    <h3>Unequal conditions hurt the farmer, in two ways</h3>
+    <p>A perishable crop cuts the farmer's share to 0.16 (interval 0.14 to 0.18, ten runs). Three farmers competing for one buyer cuts it to 0.14 (five runs). An earlier farmer deadline and a noisy price signal made no clear difference.</p>
+  </div>
+
+  <div class="finding">
+    <span class="verdict failed">Mostly failed<i>H3 &middot; 3 to 10 runs</i></span>
+    <h3>The fee helps, but a plain floor does better in the main test</h3>
+    <p>This is our main result. In the perishable-crop market, an adaptive fee on below-target deals raises the farmer's share from 0.16 to 0.27 and lifts efficiency from 0.67 to 0.72. That is a real improvement, and efficiency went up, not down.</p>
+    <p>It still misses our 0.40 target, though, and a plain price floor does better on both measures: efficiency of about 0.83, and a farmer share between 0.39 and 0.54 depending on where the floor sits.</p>
+    <p class="notice">Compare the gold fee rows with the green floor rows in both panels.</p>
+    <figure class="wide"><div class="charts2"><div><h4>Farmer share</h4><div id="fig-h3a"></div></div><div><h4>Efficiency</h4><div id="fig-h3b"></div></div></div>
+      <div class="legend"><span style="--c:var(--ink3)">No rule</span><span style="--c:var(--wheat)">Adaptive fee</span><span style="--c:var(--leaf)">Price floor</span></div>
+      <figcaption><b>Fig. 7</b>Perishable crop, one farmer and one buyer. The unconstrained and standard-fee rows have ten runs, the faster fee has five and the rest have three. Floors are named for the share of the reference price below which offers are rejected.</figcaption></figure>
+    <h4 style="font:600 15px var(--sans);margin:1.6rem 0 .3rem">When buyers differ a lot, the floor's lead disappears</h4>
+    <p>In the main market every buyer values the crop about the same, so a floor rarely blocks a trade. We then tested a market where buyer values vary widely, which is closer to a real one, and reran it with ten runs per setting.</p>
+    <p>Floors lose deals as they tighten: the deal rate falls from 0.55 to 0.41 to 0.24 as the floor rises. The fee keeps trading, with a deal rate of 0.66, but two of its ten runs collapsed to no trade at all. At a similar farmer share of about 0.30, the fee and the lightest floor reach the same efficiency, around 0.57. So the floor no longer wins outright here, and the fee does not clearly win either. Without any rule, five of the ten runs collapsed.</p>
+    <p class="notice">Watch the green floor rows slide left as the floor rises, while the fee stays high but with a wide bar.</p>
+    <figure class="wide"><div class="charts2"><div><h4>Share of pairs that reached a deal</h4><div id="fig-het"></div></div><div><h4>Efficiency</h4><div id="fig-hetE"></div></div></div>
+      <figcaption><b>Fig. 8</b>Buyer values vary widely. Ten runs per setting, except the fixed-rate fee with three. We added this scenario after seeing the main result, so read it as a follow-up and not a pre-planned test.</figcaption></figure>
+    <h4 style="font:600 15px var(--sans);margin:1.6rem 0 .3rem">Checked against real prices</h4>
+    <p>We took daily lemon prices from Agmarknet, India's government mandi price records, and used them to set the market's price level, how stale a farmer's price signal is, and how much farmers' fallback prices differ. The bargaining itself is still simulated, because no public record of farmer and buyer negotiations exists. The market conditions, though, now come from real data.</p>
+    <p>The pattern holds. The fee lifts the farmer's gain by 0.09 (interval 0.06 to 0.11), just short of our 0.10 target again, and does not cost efficiency. A price floor again does better on both measures, but with only five runs.</p>
+    <figure class="wide">
+      <table>
+        <thead><tr><th>Setting</th><th>Runs</th><th>Efficiency</th><th>Farmer share</th><th>Deal rate</th></tr></thead>
+        <tbody>
+          <tr><td>No rule</td><td>10</td><td>0.64</td><td>0.27</td><td>0.72</td></tr>
+          <tr><td>Adaptive fee</td><td>10</td><td>0.73</td><td>0.35</td><td>0.84</td></tr>
+          <tr><td>Price floor at 0.55</td><td>5</td><td>0.82</td><td>0.37</td><td>1.00</td></tr>
+        </tbody>
+      </table>
+      <figcaption><b>Table 2</b>Perishable crop with price level and spreads taken from real Agmarknet lemon prices. Interquartile means over fixed evaluation episodes.</figcaption>
+    </figure>
+  </div>
+
+  <div class="finding">
+    <span class="verdict held">Held<i>H4 &middot; 3 runs per point</i></span>
+    <h3>A weak signal destroys trade</h3>
+    <p>With the link up all the time, efficiency is 0.65. At 60 percent uptime it drops to 0.36. At 40 percent it is zero: every run stopped trading.</p>
+  </div>
+
+  <div class="finding">
+    <span class="verdict failed">Failed<i>H5 &middot; 3 runs per point</i></span>
+    <h3>Delay-aware agents did not help</h3>
+    <p>We gave some agents a memory and a view of the link's state. At 60 percent uptime they reached 0.38, against 0.36 for agents without it. The interval of that difference includes zero. On the real-price rural market the result was the same: at 60 percent uptime the aware agents reached 0.35 and the unaware ones 0.40, five runs each, again with an interval that includes zero.</p>
+    <p class="notice">The aware and unaware dots overlap at every uptime level.</p>
+    <figure class="wide"><div id="fig-h5"></div>
+      <figcaption><b>Fig. 9</b>Efficiency by link uptime in the rural one-to-one market, three runs per row.</figcaption></figure>
+  </div>
+</section>
+
+<section id="limits">
+  <h2><span class="n">7</span>Where this goes next</h2>
+  <p class="lede">This round answered the first questions. Here is what it covers, and what we are building on top of it.</p>
+
+  <h3>What this round covers</h3>
+  <ul>
+    <li>Every setting was trained several times from different random starts, three to ten runs each, and scored on fixed evaluation episodes.</li>
+    <li>The fairness mechanisms were tested in the one-farmer, one-buyer perishable-crop market. The delay study uses a rural one-to-one market, and the eight-farmer markets are covered by scripted baselines.</li>
+    <li>Each agent trained for 0.3 to 0.7 million steps, enough to show clear trends. The fee rate was still rising when training stopped, which is part of why longer runs come next.</li>
+  </ul>
+
+  <h3>The roadmap</h3>
+  <ol class="road">
+    <li><span class="st done">Done</span><div><b>Confirmed the varied-buyer result at ten runs.</b> Floors do lose deals when buyers differ widely, and the fee keeps trading. But at equal farmer share the two reach the same efficiency, and two fee runs collapsed. The next question is how to make fee training reliable.</div></li>
+    <li><span class="st next">Next</span><div><b>Train for longer.</b> Repeat the main comparisons at 3 million steps to check that the conclusions hold when the agents have more time to learn.</div></li>
+    <li><span class="st done">Done</span><div><b>Used real market prices.</b> Price level, signal staleness and farmer spread now come from Agmarknet lemon data, and the fee result survives. What is still simulated is the bargaining. Tomato and onion data, and a measured spread of buyer values, come next.</div></li>
+    <li><span class="st next">Next</span><div><b>Scale up to eight farmers.</b> Run the larger markets with learning agents instead of scripted ones.</div></li>
+    <li><span class="st next">Next</span><div><b>Harder tests.</b> A buyer that actively tries to exploit the learned farmer, cross-play between runs, colluding buyers, a centralised critic, and a close read of the two nearest prior papers.</div></li>
+  </ol>
+</section>
+
+<footer>
+  <p class="names">Harshita &amp; Jasmeen</p>
+  <p>Every number on this page comes from our own experiments. The code, 42 passing tests and the full results table are in the project folder. Prices are in grid units from 0.20 to 1.20, and the rupee figures in section 2 are an invented illustration.</p>
+</footer>
+</main>
+</div>
+<div class="footfield"><canvas id="footfield" aria-hidden="true"></canvas></div>
+<script src="data.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

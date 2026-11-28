@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgriNegotiate Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ledger. One column of findings, each a claim sentence over its chart, with the replay as the working area. */
+:root{
+  --paper:#f3eee1; --panel:#faf7ee; --ink:#2a2418; --ink-2:#5a5240; --ink-3:#8a806a; --rule:#ddd3bb;
+  --accent:#4a6b2a;
+  --s1:#3f6f8f; --s2:#b5532a; --s3:#5b8a3a; --s4:#c9962b; --s5:#8a5a7a;
+  --critical:#c0392b;
+  --display:"Fraunces",Georgia,serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --paper:#17150f; --panel:#201d15; --ink:#f0e9d6; --ink-2:#c4baa0; --ink-3:#928869; --rule:#363024;
+    --accent:#9cc46a; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --critical:#e66767; }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+  --paper:#17150f; --panel:#201d15; --ink:#f0e9d6; --ink-2:#c4baa0; --ink-3:#928869; --rule:#363024;
+  --accent:#9cc46a; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --critical:#e66767; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+main{max-width:1060px;margin:0 auto;padding:28px 20px 80px;display:flex;flex-direction:column;gap:36px}
+h1{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+h3{font-family:var(--display);font-weight:500;font-size:14px;margin:0;color:var(--ink-2)}
+p{margin:0;max-width:68ch}
+.lede{color:var(--ink-2);font-size:16px}
+.notice{border-left:3px solid var(--accent);padding:6px 12px;color:var(--ink-2);background:var(--panel);font-size:14px}
+section{display:flex;flex-direction:column;gap:12px}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.tile b{font-family:var(--display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{color:var(--ink-2);font-size:13px}
+.tile small{color:var(--ink-3);font-family:var(--mono);font-size:11.5px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--body);font-size:12px;fill:var(--ink-2)}
+svg .num{font-family:var(--mono);font-size:11px;fill:var(--ink-3)}
+svg .lbl{fill:var(--ink);font-size:12px}
+.grid{stroke:var(--rule);stroke-width:1}
+.axis{stroke:var(--ink-3);stroke-width:1}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;border-bottom:1px solid var(--rule);text-align:right;white-space:nowrap}
+th:first-child,td:first-child,th.l,td.l{text-align:left}
+td.l{white-space:normal;min-width:260px}
+th{font-weight:600;color:var(--ink-2);font-size:12.5px}
+.scroll{overflow-x:auto}
+select,button,input{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--ink-3);border-radius:5px;padding:6px 10px}
+button{cursor:pointer;font-weight:500}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button.primary{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+label{font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--paper);font-size:12.5px;padding:6px 9px;border-radius:5px;max-width:280px;display:none;z-index:9;white-space:pre-line}
+.events{font-family:var(--mono);font-size:12.5px;max-height:230px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.events div{padding:2px 6px;border-radius:3px;color:var(--ink-3)}
+.events div.now{background:var(--paper);color:var(--ink)}
+.events div.past{color:var(--ink-2)}
+.pill{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-radius:99px;padding:1px 8px;color:var(--ink-2)}
+.muted{color:var(--ink-3);font-size:13px}
+
+/* field look: furrow lines under the masthead, squarer corners, no card shadows */
+body{background-image:repeating-linear-gradient(180deg,transparent 0 31px,color-mix(in srgb,var(--rule) 45%,transparent) 31px 32px);background-attachment:fixed}
+header{border-bottom:3px double var(--accent);padding-bottom:18px}
+h2{border-left:4px solid var(--s4);padding-left:10px}
+.panel,.tile{border-radius:2px;background-image:none}
+.tile b{color:var(--accent)}
+.kicker::before{content:"\1F33E  "}
+button.primary{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<main>
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <div class="kicker">AgriNegotiate benchmark · results as of <span id="gen"></span></div>
+    <h1>Do learning agents treat farmers fairly when they negotiate, and can a platform rule fix it?</h1>
+    <p class="lede">Farmer and buyer agents bargain over a price in a simulated market. We measure how the gains from each deal are split, compare against game-theory reference points, and test a platform fee on buyers who underpay.</p>
+    <div class="notice">Simulation results. Not tested with real farmers or traders. Prices are shown as a share of the market reference price.</div>
+  </header>
+
+  <section id="headline"><div class="tiles" id="tiles"></div></section>
+
+  <section id="shares">
+    <div class="kicker">Finding 1 · exploitation</div>
+    <h2 id="sharesTitle">How the gains are split without any fairness rule</h2>
+    <p>Each dot is one independently trained pair of agents. The position is the farmer's share of the gains from trade. The bar shows the interquartile mean across runs with its 95% interval.</p>
+    <div class="panel"><div id="sharesChart"></div><p class="muted" id="sharesNote"></p></div>
+  </section>
+
+  <section id="mechanism">
+    <div class="kicker">Finding 2 · fairness mechanism · perishable crop</div>
+    <h2>Efficiency against what farmers capture, for each platform rule</h2>
+    <p>Up and to the right is better: more of the possible gains realised, and more of them reaching farmers. Each point is one rule at one strength, averaged over training runs.</p>
+    <div class="panel"><div class="legend" id="mechLegend"></div><div id="mechChart"></div></div>
+    <div class="panel scroll"><table id="mechTable"></table></div>
+  </section>
+
+  <section id="hetero">
+    <div class="kicker">Follow-up · exploratory, 3 to 5 runs per point · buyer values vary widely</div>
+    <h2>The same rules when buyers differ a lot in what the crop is worth to them</h2>
+    <p>Here a price floor has to shut out buyers who value the crop less, so it loses trades. This experiment was added after seeing the result above, so treat it as a lead to confirm, not a finding.</p>
+    <div class="panel"><div class="legend" id="hetLegend"></div><div id="hetChart"></div></div>
+    <div class="panel scroll"><table id="hetTable"></table></div>
+  </section>
+
+  <section id="delay">
+    <div class="kicker">Finding 3 · intermittent links</div>
+    <h2>What a poor connection costs, and whether delay-aware agents recover it</h2>
+    <p>The farmer's link is up for the stated share of the time. Delay-aware agents have memory and can see message age, offer validity and their own link state.</p>
+    <div class="panel"><div class="legend" id="delayLegend"></div><div class="grid2" id="delayCharts"></div></div>
+    <div class="panel scroll"><table id="delayTable"></table></div>
+  </section>
+
+  <section id="replay">
+    <div class="kicker">Negotiation replay</div>
+    <h2>Watch one negotiation</h2>
+    <div class="row">
+      <label>Recorded episode<select id="epSel"></select></label>
+      <button id="play" class="primary" type="button">Play</button>
+      <button id="stepB" type="button">Step back</button>
+      <button id="stepF" type="button">Step forward</button>
+      <span class="pill" id="stepLbl">step 0</span>
+    </div>
+    <p class="muted" id="epNote"></p>
+    <div class="tiles" id="epTiles"></div>
+    <div class="panel">
+      <div class="legend"><span><i style="background:var(--s2)"></i>Farmer asks</span><span><i style="background:var(--s1)"></i>Buyer bids</span><span><i style="background:var(--ink)"></i>Deal</span></div>
+      <div id="priceChart"></div>
+      <h3 style="margin-top:10px">Messages: sent at the start of each line, delivered at its end</h3>
+      <div id="msgChart"></div>
+    </div>
+    <div class="panel"><h3>Event log</h3><div class="events" id="evLog"></div></div>
+    <div class="panel" id="live" hidden>
+      <h3>Run a new episode (backend connected)</h3>
+      <form id="liveForm" class="row" style="margin-top:8px;align-items:flex-end">
+        <label>Scenario<select id="lvScn"></select></label>
+        <label>Farmer<select id="lvF"></select></label>
+        <label>Buyer<select id="lvB"></select></label>
+        <label>Rule<select id="lvM"><option value="none">None</option><option value="fee">Fee, target share 0.4</option><option value="floor">Price floor at 0.60</option></select></label>
+        <label>Seed<input id="lvSeed" type="number" value="50010" style="width:100px"></label>
+        <button class="primary" type="submit">Run</button>
+      </form>
+      <p class="muted" id="liveMsg"></p>
+    </div>
+  </section>
+
+  <section id="baselines">
+    <div class="kicker">Benchmark · scripted baselines</div>
+    <h2>Scores of the scripted negotiators</h2>
+    <div class="row"><label>Scenario<select id="scnSel"></select></label><span class="muted" id="scnNote"></span></div>
+    <div class="panel scroll"><table id="scriptTable"></table></div>
+  </section>
+
+  <section id="training">
+    <div class="kicker">Training</div>
+    <h2>Learning curves</h2>
+    <div class="row"><label>Experiment<select id="grpSel"></select></label><span class="muted" id="grpNote"></span></div>
+    <div class="panel"><div class="grid2" id="curveCharts"></div></div>
+  </section>
+
+  <section id="glossary">
+    <div class="kicker">How to read the numbers</div>
+    <div class="panel scroll"><table>
+      <tr><th>Term</th><th class="l">Meaning</th></tr>
+      <tr><td>Gains from trade</td><td class="l">What the pair gains by trading with each other instead of taking their fallbacks.</td></tr>
+      <tr><td>Efficiency (E)</td><td class="l">Share of the maximum possible gains that were realised. Negative means agents waited, lost value, and ended worse than walking away.</td></tr>
+      <tr><td>Farmer gain capture (FGC)</td><td class="l">Share of the maximum possible gains that reached farmers, counting unsold lots.</td></tr>
+      <tr><td>Farmer share</td><td class="l">Farmers' part of the realised gains. 0.5 is the Nash bargaining split.</td></tr>
+      <tr><td>Agreement</td><td class="l">Deals closed out of the deals in the best possible matching.</td></tr>
+    </table></div>
+  </section>
+</main>
+<script src="data.js"></script>
+<script>
+"use strict";
+const D = window.AGRI_DATA || {groups:{}, scripted:[], replays:[]};
+const NS = "http://www.w3.org/2000/svg";
+const $ = id => document.getElementById(id);
+const f2 = x => (x == null || Number.isNaN(x)) ? "n/a" : (+x).toFixed(2);
+const f3 = x => (x == null || Number.isNaN(x)) ? "n/a" : (+x).toFixed(3);
+function el(tag, attrs, parent, text){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+function svg(w, h, host){ host.innerHTML = ""; return el("svg", {viewBox:`0 0 ${w} ${h}`, role:"img"}, host); }
+const lin = (d0, d1, r0, r1) => x => r0 + (x - d0) / (d1 - d0 || 1) * (r1 - r0);
+const G = k => D.groups[k];
+const M = (g, k) => g && g.metrics[k] && g.metrics[k].iqm != null ? g.metrics[k] : null;
+const tip = $("tip");
+document.addEventListener("mouseover", e => { const t = e.target.closest && e.target.closest("[data-tip]"); if (t){ tip.textContent = t.getAttribute("data-tip"); tip.style.display = "block"; } });
+document.addEventListener("mousemove", e => { if (tip.style.display === "block"){ tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + "px"; tip.style.top = (e.clientY + 14) + "px"; } });
+document.addEventListener("mouseout", e => { if (e.target.closest && e.target.closest("[data-tip]")) tip.style.display = "none"; });
+$("gen").textContent = D.generated || "";
+
+/* ---------- headline tiles ---------- */
+(function(){
+  const t = [], add = (v, label, sub) => t.push(`<div class="tile"><b>${v}</b><span>${label}</span><small>${sub}</small></div>`);
+  const sym = G("x2_gate/SYM"), per = G("x2_gate/PERISH"), fee = G("x3_mechanism/fee_oracle_tau0.4");
+  const ci = m => `95% interval ${f2(m.ci95[0])} to ${f2(m.ci95[1])}`;
+  if (M(sym,"S_F")) add(f2(M(sym,"S_F").iqm), "Farmer share, equal conditions", `${sym.n_seeds} runs · ${ci(M(sym,"S_F"))}`);
+  if (M(per,"S_F")) add(f2(M(per,"S_F").iqm), "Farmer share, perishable crop", `${per.n_seeds} runs · ${ci(M(per,"S_F"))}`);
+  if (M(fee,"S_F")) add(f2(M(fee,"S_F").iqm), "Farmer share, perishable crop with the fee", `${fee.n_seeds} runs · ${ci(M(fee,"S_F"))}`);
+  if (M(per,"E") && M(fee,"E")) add(`${f2(M(per,"E").iqm)} → ${f2(M(fee,"E").iqm)}`, "Efficiency without and with the fee", "share of possible gains realised");
+  $("tiles").innerHTML = t.join("") || '<p class="muted">No learned results exported yet.</p>';
+})();
+
+/* ---------- finding 1: share dot plot ---------- */
+(function(){
+  const rows = [["x2_gate/SYM","Equal conditions"],["x5_diagnosis/SYMX","Equal conditions, equal uncertainty"],["x5_diagnosis/SYM_mix0","Equal conditions, no scripted opponents in training"],
+    ["x2_gate/PERISH","Perishable crop"],["x2_gate/DEADLINE","Farmer has an earlier deadline"],["x2_gate/INFO","Farmer sees a noisy market price"],["x2_gate/THIN3","Three farmers, one buyer"],["x6_hetero/unconstrained","Perishable crop, buyer values vary widely"]]
+    .filter(r => G(r[0]));
+  if (!rows.length){ $("sharesChart").innerHTML = '<p class="muted">No runs exported.</p>'; return; }
+  const W = 760, rowH = 46, L = 300, R = 30, T = 26, H = T + rows.length * rowH + 30, s = svg(W, H, $("sharesChart"));
+  const x = lin(0, 1, L, W - R);
+  for (let v = 0; v <= 1.0001; v += 0.25){ el("line", {x1:x(v), x2:x(v), y1:T - 4, y2:H - 28, class:"grid"}, s); el("text", {x:x(v), y:H - 12, "text-anchor":"middle", class:"num"}, s, v.toFixed(2)); }
+  el("line", {x1:x(.5), x2:x(.5), y1:T - 8, y2:H - 28, stroke:"var(--ink-2)", "stroke-dasharray":"4 3"}, s);
+  el("text", {x:x(.5), y:T - 12, "text-anchor":"middle", class:"lbl"}, s, "equal split (Nash)");
+  el("text", {x:x(0), y:T - 12, "text-anchor":"start"}, s, "buyer takes all");
+  el("text", {x:x(1), y:T - 12, "text-anchor":"end"}, s, "farmer takes all");
+  const notes = [];
+  rows.forEach(([k, name], i) => {
+    const g = G(k), m = g.metrics.S_F, y = T + i * rowH + rowH / 2;
+    el("text", {x:L - 14, y:y - 2, "text-anchor":"end", class:"lbl"}, s, name);
+    el("text", {x:L - 14, y:y + 13, "text-anchor":"end", class:"num"}, s, `${g.n_seeds} runs`);
+    if (m.iqm != null){ el("line", {x1:x(m.ci95[0]), x2:x(m.ci95[1]), y1:y, y2:y, stroke:"var(--ink)", "stroke-width":2}, s);
+      el("rect", {x:x(m.iqm) - 2, y:y - 11, width:4, height:22, rx:2, fill:"var(--ink)", "data-tip":`${name}\nInterquartile mean ${f3(m.iqm)}\n95% interval ${f3(m.ci95[0])} to ${f3(m.ci95[1])}`}, s);
+      el("text", {x:x(m.ci95[1]) + 8, y:y - 12, class:"num"}, s, f2(m.iqm)); }
+    m.per_seed.forEach((v, j) => { if (v == null) return; el("circle", {cx:x(v), cy:y + ((j % 3) - 1) * 5, r:4.5, fill:"var(--s1)", stroke:"var(--panel)", "stroke-width":2, "data-tip":`${name}\nRun ${j + 1}: farmer share ${f3(v)}`}, s); });
+    if (m.undefined) notes.push(`${name}: ${m.undefined} of ${g.n_seeds} runs have no defined share (no trade, or one side lost overall).`);
+  });
+  $("sharesNote").textContent = notes.join(" ");
+})();
+
+/* ---------- finding 2: mechanism frontier ---------- */
+function drawMech(pre, baseKey, chartId, legendId, tableId){
+  const fam = [["Unconstrained","var(--s1)", k => k === baseKey],["Adaptive fee, true values","var(--s2)", k => k.startsWith(pre) && /fee_oracle/.test(k)],
+    ["Adaptive fee, public prices only","var(--s3)", k => k.startsWith(pre) && /fee_observable/.test(k)],["Hard price floor","var(--s4)", k => k.startsWith(pre) && /floor_kappa/.test(k)],["Fixed fee","var(--s5)", k => k.startsWith(pre) && /fee_fixed/.test(k)]];
+  const pts = [];
+  Object.keys(D.groups).forEach(k => { const g = G(k); fam.forEach(([name, col, test], fi) => { if (test(k) && M(g,"E") && M(g,"FGC")){
+    const par = k.match(/tau([\d.]+)/) ? "target " + k.match(/tau([\d.]+)/)[1] : k.match(/kappa([\d.]+)/) ? "floor " + k.match(/kappa([\d.]+)/)[1] : "";
+    const par2 = /eta/.test(k) ? par + ", fast update" : par;
+    pts.push({k, g, name, col, fi, par:par2, x:M(g,"FGC"), y:M(g,"E")}); } }); });
+  if (pts.length < 2){ $(chartId).innerHTML = '<p class="muted">Mechanism runs not exported yet.</p>'; return; }
+  $(legendId).innerHTML = fam.filter((f, i) => pts.some(p => p.fi === i)).map(f => `<span><i style="background:${f[1]}"></i>${f[0]}</span>`).join("");
+  const W = 760, H = 400, L = 56, R = 30, T = 16, B = 46, s = svg(W, H, $(chartId));
+  const xs = pts.flatMap(p => p.x.ci95), ys = pts.flatMap(p => p.y.ci95);
+  const x0 = Math.min(0, Math.floor(Math.min(...xs) * 10) / 10), x1 = Math.ceil(Math.max(...xs) * 10) / 10 + .02, y0 = Math.floor(Math.min(...ys) * 10) / 10, y1 = Math.min(1, Math.ceil(Math.max(...ys) * 10) / 10 + .02);
+  const x = lin(x0, x1, L, W - R), y = lin(y0, y1, H - B, T);
+  for (let v = x0; v <= x1 + 1e-9; v += .1){ el("line", {x1:x(v), x2:x(v), y1:T, y2:H - B, class:"grid"}, s); el("text", {x:x(v), y:H - B + 16, "text-anchor":"middle", class:"num"}, s, v.toFixed(1)); }
+  for (let v = y0; v <= y1 + 1e-9; v += .1){ el("line", {x1:L, x2:W - R, y1:y(v), y2:y(v), class:"grid"}, s); el("text", {x:L - 8, y:y(v) + 4, "text-anchor":"end", class:"num"}, s, v.toFixed(1)); }
+  el("text", {x:(L + W - R) / 2, y:H - 8, "text-anchor":"middle"}, s, "Farmer gain capture (share of possible gains reaching farmers)");
+  el("text", {x:14, y:(T + H - B) / 2, "text-anchor":"middle", transform:`rotate(-90 14 ${(T + H - B) / 2})`}, s, "Efficiency");
+  fam.forEach((f, fi) => { const ps = pts.filter(p => p.fi === fi).sort((a, b) => a.x.iqm - b.x.iqm); if (ps.length > 1) el("polyline", {points:ps.map(p => `${x(p.x.iqm)},${y(p.y.iqm)}`).join(" "), fill:"none", stroke:f[1], "stroke-width":2, opacity:.55}, s); });
+  pts.forEach(p => { el("line", {x1:x(p.x.ci95[0]), x2:x(p.x.ci95[1]), y1:y(p.y.iqm), y2:y(p.y.iqm), stroke:p.col, "stroke-width":1, opacity:.6}, s);
+    el("line", {x1:x(p.x.iqm), x2:x(p.x.iqm), y1:y(p.y.ci95[0]), y2:y(p.y.ci95[1]), stroke:p.col, "stroke-width":1, opacity:.6}, s);
+    el("circle", {cx:x(p.x.iqm), cy:y(p.y.iqm), r:6, fill:p.col, stroke:"var(--panel)", "stroke-width":2,
+      "data-tip":`${p.name}${p.par ? " · " + p.par : ""}\nEfficiency ${f3(p.y.iqm)} (${f2(p.y.ci95[0])} to ${f2(p.y.ci95[1])})\nFarmer gain capture ${f3(p.x.iqm)} (${f2(p.x.ci95[0])} to ${f2(p.x.ci95[1])})\n${p.g.n_seeds} runs, ${p.g.failed_runs} failed`}, s);
+    el("text", {x:x(p.x.iqm) + 9, y:y(p.y.iqm) - 8, class:"lbl"}, s, p.par || p.name); });
+  const head = "<tr><th>Rule</th><th>Setting</th><th>Runs</th><th>Failed</th><th>Efficiency</th><th>Farmer gain capture</th><th>Farmer share</th><th>Agreement</th><th>Fee rate learned</th><th>Fees / possible gains</th></tr>";
+  const cell = (g, k) => M(g, k) ? `${f2(M(g,k).iqm)} <span class="muted">[${f2(M(g,k).ci95[0])}, ${f2(M(g,k).ci95[1])}]</span>` : "n/a";
+  $(tableId).innerHTML = head + pts.sort((a, b) => a.fi - b.fi || a.x.iqm - b.x.iqm).map(p => `<tr><td>${p.name}</td><td>${p.par || "none"}</td><td>${p.g.n_seeds}</td><td>${p.g.failed_runs}</td><td>${cell(p.g,"E")}</td><td>${cell(p.g,"FGC")}</td><td>${cell(p.g,"S_F")}</td><td>${cell(p.g,"agreement_rate")}</td><td>${p.fi === 0 || p.fi === 3 ? "none" : cell(p.g,"lam_fair")}</td><td>${cell(p.g,"fees_over_gstar")}</td></tr>`).join("");
+}
+drawMech("x3_mechanism/", "x2_gate/PERISH", "mechChart", "mechLegend", "mechTable");
+drawMech("x6_hetero/", "x6_hetero/unconstrained", "hetChart", "hetLegend", "hetTable");
+
+/* ---------- generic small line chart ---------- */
+function lineChart(host, title, series, xs, opts){
+  const box = document.createElement("div"); host.appendChild(box);
+  const h3 = document.createElement("h3"); h3.textContent = title; box.appendChild(h3);
+  const holder = document.createElement("div"); box.appendChild(holder);
+  const W = 420, H = 230, L = 44, R = 96, T = 12, B = 34, s = svg(W, H, holder);
+  const vals = series.flatMap(se => se.pts.flatMap(p => p == null ? [] : (p.lo != null ? [p.lo, p.hi, p.v] : [p.v])));
+  if (!vals.length){ holder.innerHTML = '<p class="muted">No data.</p>'; return; }
+  let y0 = opts && opts.y0 != null ? opts.y0 : Math.floor(Math.min(...vals) * 10) / 10, y1 = opts && opts.y1 != null ? opts.y1 : Math.ceil(Math.max(...vals) * 10) / 10;
+  if (y1 - y0 < .1) y1 = y0 + .1;
+  const x = lin(0, xs.length - 1, L, W - R), y = lin(y0, y1, H - B, T), n = 4;
+  for (let i = 0; i <= n; i++){ const v = y0 + (y1 - y0) * i / n; el("line", {x1:L, x2:W - R, y1:y(v), y2:y(v), class:"grid"}, s); el("text", {x:L - 6, y:y(v) + 4, "text-anchor":"end", class:"num"}, s, v.toFixed(2)); }
+  const every = Math.max(1, Math.ceil(xs.length / 6));
+  xs.forEach((lab, i) => { if (i % every === 0 || i === xs.length - 1) el("text", {x:x(i), y:H - B + 15, "text-anchor":"middle", class:"num"}, s, lab); });
+  if (opts && opts.xlabel) el("text", {x:(L + W - R) / 2, y:H - 4, "text-anchor":"middle"}, s, opts.xlabel);
+  let lastY = [];
+  series.forEach(se => { const ok = se.pts.map((p, i) => p == null ? null : [x(i), y(p.v), p, i]).filter(Boolean); if (!ok.length) return;
+    el("polyline", {points:ok.map(o => `${o[0]},${o[1]}`).join(" "), fill:"none", stroke:se.col, "stroke-width":2}, s);
+    ok.forEach(o => { if (o[2].lo != null) el("line", {x1:o[0], x2:o[0], y1:y(o[2].lo), y2:y(o[2].hi), stroke:se.col, "stroke-width":1, opacity:.6}, s);
+      el("circle", {cx:o[0], cy:o[1], r:ok.length > 8 ? 2.5 : 4.5, fill:se.col, stroke:"var(--panel)", "stroke-width":ok.length > 8 ? 0 : 2, "data-tip":`${se.name}\n${opts && opts.xname || "x"} ${xs[o[3]]}: ${f3(o[2].v)}${o[2].lo != null ? `\n95% interval ${f2(o[2].lo)} to ${f2(o[2].hi)}` : ""}`}, s); });
+    let ly = ok[ok.length - 1][1]; while (lastY.some(v => Math.abs(v - ly) < 13)) ly += 13; lastY.push(ly);
+    el("text", {x:ok[ok.length - 1][0] + 8, y:ly + 4, class:"lbl"}, s, se.name); });
+}
+
+/* ---------- finding 3: delay ---------- */
+(function(){
+  const duties = ["1.0","0.6","0.4"], cells = [["unaware","Delay-unaware","var(--s1)"],["aware","Delay-aware","var(--s2)"]];
+  if (!duties.some(d => G(`x4_delay/unaware_duty${d}`))){ $("delayCharts").innerHTML = '<p class="muted">Delay runs not exported yet.</p>'; return; }
+  $("delayLegend").innerHTML = cells.map(c => `<span><i style="background:${c[2]}"></i>${c[1]}</span>`).join("");
+  [["E","Efficiency"],["agreement_rate","Agreement rate"],["FGC","Farmer gain capture"],["S_F","Farmer share (exploratory)"]].forEach(([k, title]) =>
+    lineChart($("delayCharts"), title, cells.map(c => ({name:c[1], col:c[2], pts:duties.map(d => { const m = M(G(`x4_delay/${c[0]}_duty${d}`), k); return m ? {v:m.iqm, lo:m.ci95[0], hi:m.ci95[1]} : null; })})), duties.map(d => Math.round(d * 100) + "%"), {xlabel:"Share of time the farmer's link is up", xname:"link up"}));
+  const rows = [["unaware_duty0.6","No memory, no delay features"],["features_only_duty0.6","Delay features only"],["memory_only_duty0.6","Memory only"],["aware_duty0.6","Memory and delay features"]].filter(r => G("x4_delay/" + r[0]));
+  const c = (g, k) => M(g, k) ? `${f2(M(g,k).iqm)} <span class="muted">[${f2(M(g,k).ci95[0])}, ${f2(M(g,k).ci95[1])}]</span>` : "n/a";
+  $("delayTable").innerHTML = "<tr><th>Agent at 60% link uptime</th><th>Runs</th><th>Failed</th><th>Efficiency</th><th>Agreement</th><th>Farmer gain capture</th></tr>" +
+    rows.map(r => { const g = G("x4_delay/" + r[0]); return `<tr><td>${r[1]}</td><td>${g.n_seeds}</td><td>${g.failed_runs}</td><td>${c(g,"E")}</td><td>${c(g,"agreement_rate")}</td><td>${c(g,"FGC")}</td></tr>`; }).join("");
+})();
+
+/* ---------- replay ---------- */
+let EP = null, CUR = 0, TIMER = null;
+const side = s => s === 0 ? "Farmer" : "Buyer";
+function describe(e, lv){ const p = v => f2(v / lv);
+  switch (e.kind){
+    case "reset": return `start · farmer link ${e.link[0] ? "up" : "down"}`;
+    case "links": return `farmer link ${e.link[0] ? "up" : "down"}`;
+    case "send": return `${side(e.side)} sends ${e.msg === "offer" ? "offer at " + p(e.price) : "ACCEPT of " + p(e.price)}${e.lost ? " (lost: link down)" : ""}`;
+    case "deliver": return `${side(e.side)}'s offer at ${p(e.price)} delivered (sent at step ${e.send_t})`;
+    case "deal": return `DEAL at ${p(e.price)} · farmer gain share ${e.phi == null ? "n/a" : f2(e.phi)}${e.fee ? " · fee " + p(e.fee) : ""}`;
+    case "accept_failed": return `${side(e.side)}'s ACCEPT arrived too late or the offer was replaced`;
+    case "walk": return `${side(e.side)} walks away`;
+    case "fallback": return `Farmer sells to the local trader at ${p(e.price)}`;
+  } return e.kind; }
+function loadEpisode(ep, note){
+  EP = ep; CUR = 0; stop();
+  const lv = ep.level, ev = ep.events, tEnd = Math.max(4, ...ev.map(e => e.t)) + 1;
+  EP.tEnd = tEnd; $("epNote").textContent = `${note || ""} Scenario ${ep.scenario}, episode seed ${ep.seed}. Farmer: ${ep.farmer.replace(/^run:/,"trained ")}. Buyer: ${ep.buyer.replace(/^run:/,"trained ")}.`;
+  const d = ep.deals[0], t = [];
+  const tile = (v, l, sub) => t.push(`<div class="tile"><b>${v}</b><span>${l}</span><small>${sub || ""}</small></div>`);
+  tile(d ? f2(d.price / lv) : "none", "Deal price", d ? `closed at step ${d.t}` : "no deal: farmer took the fallback");
+  tile(d && d.phi != null ? f2(d.phi) : "n/a", "Farmer's share of the gains", "0.50 is the Nash split");
+  tile(f2(ep.price_received[0] / lv), "Price the farmer received", "share of the market price");
+  tile(f2(ep.E), "Efficiency of this episode", "share of possible gains realised");
+  if (ep.fees[0] > 0) tile(f2(ep.fees[0] / lv), "Fee charged to the buyer", "for paying below the target");
+  $("epTiles").innerHTML = t.join("");
+  drawEpisode();
+}
+function drawEpisode(){
+  const ep = EP, lv = ep.level, ev = ep.events, T = ep.tEnd;
+  const offers = ev.filter(e => e.kind === "send" && e.msg === "offer"), L = 46, R = 150, W = 760;
+  const lines = [["nash","Nash price","var(--ink-2)","5 4"],["target","Target price","var(--accent)","2 3"],["floor","Price floor","var(--accent)","2 3"],["farmer_fallback","Farmer fallback","var(--s2)",""],["buyer_walkaway","Buyer walk-away","var(--s1)",""]].filter(l => ep.lines[l[0]]);
+  const all = offers.map(o => o.price / lv).concat(lines.flatMap(l => ep.lines[l[0]].slice(0, T + 1).filter(v => v != null).map(v => v / lv)));
+  const y0 = Math.max(0, Math.floor(Math.min(...all) * 10) / 10 - .05), y1 = Math.ceil(Math.max(...all) * 10) / 10 + .05, H = 300, Tp = 12, B = 30;
+  const s = svg(W, H, $("priceChart")), x = lin(0, T, L, W - R), y = lin(y0, y1, H - B, Tp);
+  for (let v = Math.ceil(y0 * 5) / 5; v <= y1; v += .2){ el("line", {x1:L, x2:W - R, y1:y(v), y2:y(v), class:"grid"}, s); el("text", {x:L - 6, y:y(v) + 4, "text-anchor":"end", class:"num"}, s, v.toFixed(1)); }
+  for (let t = 0; t <= T; t += Math.max(1, Math.round(T / 10))) el("text", {x:x(t), y:H - B + 15, "text-anchor":"middle", class:"num"}, s, t);
+  el("text", {x:(L + W - R) / 2, y:H - 2, "text-anchor":"middle"}, s, "Step");
+  let used = [];
+  lines.forEach(l => { const pts = ep.lines[l[0]].slice(0, T + 1).map((v, t) => v == null ? null : [x(t), y(v / lv)]).filter(Boolean); if (!pts.length) return;
+    el("polyline", {points:pts.map(p => p.join(",")).join(" "), fill:"none", stroke:l[2], "stroke-width":1.5, "stroke-dasharray":l[3], opacity:.85}, s);
+    let ly = pts[pts.length - 1][1]; while (used.some(v => Math.abs(v - ly) < 13)) ly += 13; used.push(ly);
+    el("text", {x:W - R + 8, y:ly + 4}, s, l[1]); });
+  el("line", {x1:x(CUR), x2:x(CUR), y1:Tp, y2:H - B, stroke:"var(--accent)", "stroke-width":2, opacity:.5}, s);
+  offers.forEach(o => el("circle", {cx:x(o.t), cy:y(o.price / lv), r:5, fill:o.side === 0 ? "var(--s2)" : "var(--s1)", stroke:"var(--panel)", "stroke-width":2, opacity:o.t <= CUR ? 1 : .25,
+    "data-tip":`${side(o.side)} ${o.side === 0 ? "asks" : "bids"} ${f2(o.price / lv)}\nsent at step ${o.t}${o.lost ? "\nlost: link was down" : ""}`}, s));
+  ep.deals.forEach(d => { el("circle", {cx:x(d.t), cy:y(d.price / lv), r:9, fill:"none", stroke:"var(--ink)", "stroke-width":2.5, opacity:d.t <= CUR ? 1 : .25, "data-tip":`Deal at ${f2(d.price / lv)}, step ${d.t}\nFarmer gain share ${d.phi == null ? "n/a" : f2(d.phi)}`}, s); });
+  /* message lanes */
+  const H2 = 150, s2 = svg(W, H2, $("msgChart")), yF = 34, yB = 96, yL = 132;
+  el("text", {x:L - 8, y:yF + 4, "text-anchor":"end", class:"lbl"}, s2, "Farmer"); el("text", {x:L - 8, y:yB + 4, "text-anchor":"end", class:"lbl"}, s2, "Buyer"); el("text", {x:L - 16, y:yL + 4, "text-anchor":"end"}, s2, "Link");
+  el("line", {x1:L, x2:W - R, y1:yF, y2:yF, class:"axis"}, s2); el("line", {x1:L, x2:W - R, y1:yB, y2:yB, class:"axis"}, s2);
+  const link = []; ev.forEach(e => { if (e.kind === "reset" || e.kind === "links") link[e.t] = e.link[0]; });
+  const bw = (x(1) - x(0));
+  for (let t = 0; t <= T; t++){ if (link[t] == null) continue; el("rect", {x:x(t) - bw / 2 + 1, y:yL - 6, width:Math.max(2, bw - 2), height:12, rx:2, fill:link[t] ? "var(--rule)" : "var(--ink)", "data-tip":`Step ${t}: farmer link ${link[t] ? "up" : "down"}`}, s2); }
+  el("text", {x:W - R + 8, y:yL + 4}, s2, "dark = link down");
+  ev.filter(e => e.kind === "send").forEach(m => { const from = m.side === 0 ? yF : yB, to = m.side === 0 ? yB : yF, col = m.side === 0 ? "var(--s2)" : "var(--s1)";
+    let arr = null, failed = false;
+    if (m.msg === "offer"){ const dv = ev.find(e => e.kind === "deliver" && e.side === m.side && e.send_t === m.t); arr = dv ? dv.t : null; }
+    else { const fl = ev.find(e => e.kind === "accept_failed" && e.side === m.side && e.send_t === m.t); if (fl){ arr = fl.t; failed = true; } else { const dl = ev.find(e => e.kind === "deal" && e.t > m.t); arr = dl ? dl.t : null; } }
+    const op = m.t <= CUR ? 1 : .2, label = `${side(m.side)} ${m.msg === "offer" ? "offer " + f2(m.price / lv) : "ACCEPT"}\nsent step ${m.t}` + (arr != null ? `, ${failed ? "arrived too late at" : "delivered"} step ${arr}` : m.lost ? ", lost" : ", never delivered (replaced or thread closed)");
+    if (arr != null){ el("line", {x1:x(m.t), y1:from, x2:x(arr), y2:to, stroke:failed ? "var(--critical)" : col, "stroke-width":m.msg === "accept" ? 3 : 1.5, "stroke-dasharray":arr - m.t > 1 ? "5 3" : "", opacity:op, "data-tip":label}, s2);
+      if (failed) el("text", {x:x(arr) + 5, y:to - 6, fill:"var(--critical)", class:"lbl", opacity:op}, s2, "late"); }
+    else el("line", {x1:x(m.t), y1:from, x2:x(m.t) + bw * .4, y2:from + (to - from) * .35, stroke:"var(--ink-3)", "stroke-width":1.5, opacity:op, "data-tip":label}, s2);
+    el("circle", {cx:x(m.t), cy:from, r:4, fill:col, stroke:"var(--panel)", "stroke-width":1.5, opacity:op, "data-tip":label}, s2); });
+  el("line", {x1:x(CUR), x2:x(CUR), y1:14, y2:H2 - 8, stroke:"var(--accent)", "stroke-width":2, opacity:.5}, s2);
+  $("stepLbl").textContent = `step ${CUR} of ${T}`;
+  $("evLog").innerHTML = ev.filter(e => !(e.kind === "links" && ep.duty >= 1)).map(e => `<div class="${e.t === CUR ? "now" : e.t < CUR ? "past" : ""}">${String(e.t).padStart(2, "0")}  ${describe(e, lv)}</div>`).join("");
+  const now = $("evLog").querySelector(".now"); if (now) $("evLog").scrollTop = Math.max(0, now.offsetTop - $("evLog").offsetTop - 60);
+}
+function stop(){ if (TIMER){ clearInterval(TIMER); TIMER = null; } $("play").textContent = "Play"; }
+$("play").onclick = () => { if (TIMER) return stop(); if (CUR >= EP.tEnd) CUR = 0; $("play").textContent = "Pause"; TIMER = setInterval(() => { if (CUR >= EP.tEnd) return stop(); CUR++; drawEpisode(); }, 550); };
+$("stepF").onclick = () => { stop(); CUR = Math.min(EP.tEnd, CUR + 1); drawEpisode(); };
+$("stepB").onclick = () => { stop(); CUR = Math.max(0, CUR - 1); drawEpisode(); };
+(function(){ const sel = $("epSel"); D.replays.forEach((r, i) => { const o = document.createElement("option"); o.value = i; o.textContent = `${r.title} (seed ${r.episode.seed})`; sel.appendChild(o); });
+  sel.onchange = () => { const r = D.replays[sel.value]; loadEpisode(r.episode, r.note); CUR = r.episode.tEnd; drawEpisode(); };
+  if (D.replays.length){ const r = D.replays[0]; loadEpisode(r.episode, r.note); CUR = EP.tEnd; drawEpisode(); } else $("epNote").textContent = "No recorded episodes exported."; })();
+
+/* ---------- live mode (only when served by the FastAPI backend) ---------- */
+(async function(){ try {
+    if (location.protocol === "file:") return;
+    const [sc, me] = await Promise.all([fetch("api/scenarios").then(r => r.ok ? r.json() : Promise.reject()), fetch("api/methods").then(r => r.ok ? r.json() : Promise.reject())]);
+    const fill = (id, arr) => { $(id).innerHTML = arr.map(a => `<option>${a}</option>`).join(""); };
+    fill("lvScn", Object.keys(sc).filter(k => sc[k].bilateral)); fill("lvF", me.scripted_farmer.concat(me.trained)); fill("lvB", me.scripted_buyer.concat(me.trained));
+    $("lvScn").value = "PERISH"; $("lvB").value = "HardballBuyer"; $("live").hidden = false;
+    $("liveForm").addEventListener("submit", async e => { e.preventDefault(); $("liveMsg").textContent = "Running…";
+      const k = $("lvM").value, mech = k === "fee" ? {kind:"fee", tau:.4, lam:1} : k === "floor" ? {kind:"floor", kappa:.6} : null;
+      const r = await fetch("api/episodes", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({scenario:$("lvScn").value, farmer:$("lvF").value, buyer:$("lvB").value, seed:+$("lvSeed").value, mechanism:mech})});
+      if (!r.ok){ $("liveMsg").textContent = "Could not run that episode: " + (await r.json()).detail; return; }
+      $("liveMsg").textContent = "Showing the new episode above."; loadEpisode(await r.json(), "Live episode."); $("play").click(); $("replay").scrollIntoView({behavior:"smooth"}); });
+  } catch (err) { /* no backend: recorded episodes only */ } })();
+
+/* ---------- scripted baselines ---------- */
+(function(){ const scn = [...new Set(D.scripted.map(r => r.scenario))], sel = $("scnSel");
+  sel.innerHTML = scn.map(s => `<option>${s}</option>`).join("");
+  const names = {TakeFallback:"Take fallback (floor)", OracleFairSplit:"Oracle fair split (ceiling)", ZIC:"Random (ZI-C)", TitForTat:"Tit-for-tat", HardballBuyer:"Hardball", Tuned:"Tuned heuristic"};
+  const draw = () => { $("scriptTable").innerHTML = "<tr><th>Farmer</th><th class='l'>Buyer</th><th>Efficiency</th><th>Farmer gain capture</th><th>Farmer share</th><th>Agreement</th><th>Price share</th><th>Steps to deal</th></tr>" +
+    D.scripted.filter(r => r.scenario === sel.value).map(r => `<tr><td>${names[r.farmer] || r.farmer}</td><td class="l">${names[r.buyer] || r.buyer}</td><td>${f3(r.E)}</td><td>${f3(r.FGC)}</td><td>${f3(r.S_F)}</td><td>${f3(r.agreement_rate)}</td><td>${f3(r.price_share)}</td><td>${r.time_to_agreement == null ? "n/a" : r.time_to_agreement.toFixed(1)}</td></tr>`).join(""); };
+  sel.onchange = draw; $("scnNote").textContent = `${D.scripted_episodes || ""} fixed evaluation episodes per row. Scripted agents have no training seeds, so no intervals.`; if (scn.length) draw(); })();
+
+/* ---------- training curves ---------- */
+(function(){ const keys = Object.keys(D.groups), sel = $("grpSel"); if (!keys.length){ $("curveCharts").innerHTML = '<p class="muted">No runs exported.</p>'; return; }
+  sel.innerHTML = keys.map(k => `<option value="${k}">${k.replace("/", " / ")}</option>`).join("");
+  const draw = () => { const g = G(sel.value), host = $("curveCharts"); host.innerHTML = ""; const xs = g.curve.map(c => c.iter);
+    $("grpNote").textContent = `Scenario ${g.scenario}. Mean over ${g.n_seeds} runs, about ${Math.round(g.agent_steps / 1000)}k agent-steps each.`;
+    const one = (k, title, o) => lineChart(host, title, [{name:"", col:"var(--s1)", pts:g.curve.map(c => c[k] == null ? null : {v:c[k]})}], xs, Object.assign({xlabel:"Training iteration", xname:"iteration"}, o || {}));
+    one("E", "Efficiency"); one("S_F", "Farmer share", {y0:0, y1:1}); one("agreement_rate", "Agreement rate", {y0:0, y1:1});
+    if (g.curve.some(c => c.lam_fair)) one("lam_fair", "Fee rate set by the platform", {y0:0}); };
+  sel.onchange = draw; draw(); })();
+</script>
+</body>
+</html>
