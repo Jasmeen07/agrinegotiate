@@ -1,0 +1,43 @@
+{
+ "seed": 1002,
+ "scenario": "RURAL1-DTN",
+ "agent_steps": 173981,
+ "seconds": 48.6,
+ "final_checkpoint_1000_episodes": {
+  "episodes": 1000,
+  "episodes_no_trade_possible": 0,
+  "E": -0.0001306006635140907,
+  "FGC": -0.00011930473854803923,
+  "BGC": -1.1295924966051485e-05,
+  "BGC_net_of_fees": -1.1295924966051485e-05,
+  "S_F": null,
+  "agreement_rate": 0.0,
+  "deals": 0,
+  "fees_over_gstar": 0.0,
+  "failed_accepts_per_episode": 0.0,
+  "decay_loss": 0.0,
+  "fallback_rate": 1.0,
+  "price_share": 0.4495386590595302,
+  "phi_mean": null,
+  "phi_median": null,
+  "phi_p10": null,
+  "nash_distance": null,
+  "low_share_deal_rate": null,
+  "time_to_agreement": null,
+  "j_c": null
+ },
+ "last10_checkpoint_mean": {
+  "E": -8.259136219867231e-05,
+  "FGC": -7.513278954143866e-05,
+  "BGC": -7.458572657233651e-06,
+  "S_F": null,
+  "agreement_rate": 0.0,
+  "price_share": 0.4482564936647095,
+  "fees_over_gstar": 0.0,
+  "lam_fair": 0.0,
+  "j_c": null,
+  "time_to_agreement": null,
+  "phi_mean": null
+ },
+ "last10_checkpoints_used": 10
+}

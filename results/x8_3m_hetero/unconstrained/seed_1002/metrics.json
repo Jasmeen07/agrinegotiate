@@ -1,0 +1,43 @@
+{
+ "seed": 1002,
+ "scenario": "PERISH-HET",
+ "agent_steps": 3000076,
+ "seconds": 2984.4,
+ "final_checkpoint_1000_episodes": {
+  "episodes": 1000,
+  "episodes_no_trade_possible": 9,
+  "E": 0.0,
+  "FGC": 0.0,
+  "BGC": 0.0,
+  "BGC_net_of_fees": 0.0,
+  "S_F": null,
+  "agreement_rate": 0.0,
+  "deals": 0,
+  "fees_over_gstar": 0.0,
+  "failed_accepts_per_episode": 0.0,
+  "decay_loss": 0.0,
+  "fallback_rate": 1.0,
+  "price_share": 0.4489397570379167,
+  "phi_mean": null,
+  "phi_median": null,
+  "phi_p10": null,
+  "nash_distance": null,
+  "low_share_deal_rate": null,
+  "time_to_agreement": null,
+  "j_c": null
+ },
+ "last10_checkpoint_mean": {
+  "E": 0.0,
+  "FGC": 0.0,
+  "BGC": 0.0,
+  "S_F": null,
+  "agreement_rate": 0.0,
+  "price_share": 0.44781155710802156,
+  "fees_over_gstar": 0.0,
+  "lam_fair": 0.0,
+  "j_c": null,
+  "time_to_agreement": null,
+  "phi_mean": null
+ },
+ "last10_checkpoints_used": 10
+}

@@ -1,0 +1,992 @@
+[
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9334086799081184,
+  "FGC": 0.43864222415245074,
+  "BGC": 0.49476645575566763,
+  "agreement_rate": 0.9933333333333333
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.567268416903753,
+  "FGC": 0.4003246229749524,
+  "BGC": 0.1669437939288005,
+  "agreement_rate": 0.88
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8366199659432969,
+  "FGC": 0.023808361860272055,
+  "BGC": 0.8128116040830248,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9461118125514868,
+  "FGC": 0.34146897133185306,
+  "BGC": 0.6046428412196337,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9231767016304934,
+  "FGC": 0.6003746746960759,
+  "BGC": 0.32280202693441756,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9378545445470182,
+  "FGC": 0.19570931358456972,
+  "BGC": 0.7421452309624486,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5939031946955805,
+  "FGC": 0.20137696979403383,
+  "BGC": 0.3925262249015467,
+  "agreement_rate": 0.7733333333333333
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.3400747606105989,
+  "FGC": 0.0579529695650853,
+  "BGC": 0.2821217910455136,
+  "agreement_rate": 0.67
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.48568974523411274,
+  "FGC": 0.15568198379567197,
+  "BGC": 0.33000776143844074,
+  "agreement_rate": 0.7833333333333333
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6997662552087875,
+  "FGC": 0.2592519226703735,
+  "BGC": 0.44051433253841404,
+  "agreement_rate": 0.8966666666666666
+ },
+ {
+  "seed": "seed_1000",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.42452841852462797,
+  "FGC": 0.10607486118808157,
+  "BGC": 0.3184535573365464,
+  "agreement_rate": 0.7366666666666667
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.6400628216682912,
+  "FGC": 0.3705343730555902,
+  "BGC": 0.26952844861270103,
+  "agreement_rate": 0.7666666666666667
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.33522900958865365,
+  "FGC": 0.21654420530263196,
+  "BGC": 0.1186848042860217,
+  "agreement_rate": 0.6233333333333333
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.5126111913361531,
+  "FGC": 0.2706731738931914,
+  "BGC": 0.2419380174429617,
+  "agreement_rate": 0.7633333333333333
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.716483362672032,
+  "FGC": 0.39300638955295797,
+  "BGC": 0.32347697311907403,
+  "agreement_rate": 0.86
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.5067814623021725,
+  "FGC": 0.28000049182692766,
+  "BGC": 0.22678097047524473,
+  "agreement_rate": 0.7433333333333333
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": -0.0752501794827449,
+  "FGC": -0.10203980261035799,
+  "BGC": 0.02678962312761308,
+  "agreement_rate": 0.21666666666666667
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.9206663236251857,
+  "FGC": 0.4605989582102281,
+  "BGC": 0.46006736541495763,
+  "agreement_rate": 0.9866666666666667
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.5318302772918057,
+  "FGC": 0.09214564951657611,
+  "BGC": 0.4396846277752296,
+  "agreement_rate": 0.86
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.7767649203689969,
+  "FGC": 0.7061745278389351,
+  "BGC": 0.07059039253006186,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.9285468739437017,
+  "FGC": 0.7004873661877944,
+  "BGC": 0.2280595077559072,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1001",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.7597543655423296,
+  "FGC": 0.4555875051593252,
+  "BGC": 0.30416686038300433,
+  "agreement_rate": 0.97
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9421855824670491,
+  "FGC": 0.459624985297181,
+  "BGC": 0.4825605971698681,
+  "agreement_rate": 0.9966666666666667
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.5855087888865412,
+  "FGC": 0.49817261261871965,
+  "BGC": 0.08733617626782161,
+  "agreement_rate": 0.9066666666666666
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8407221809047755,
+  "FGC": 0.00628071611577299,
+  "BGC": 0.8344414647890025,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9490952416143802,
+  "FGC": 0.32944202292206376,
+  "BGC": 0.6196532186923165,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9323507459988907,
+  "FGC": 0.6478484896593679,
+  "BGC": 0.2845022563395228,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9413227808326319,
+  "FGC": 0.19837575330953075,
+  "BGC": 0.7429470275231012,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5478281392859266,
+  "FGC": 0.1756733618151481,
+  "BGC": 0.3721547774707784,
+  "agreement_rate": 0.7433333333333333
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.32151474496085636,
+  "FGC": 0.05904172316678906,
+  "BGC": 0.2624730217940673,
+  "agreement_rate": 0.6466666666666666
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.4515101761737518,
+  "FGC": 0.1359495916173221,
+  "BGC": 0.3155605845564297,
+  "agreement_rate": 0.7566666666666667
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6960868318050223,
+  "FGC": 0.25895065794887795,
+  "BGC": 0.43713617385614423,
+  "agreement_rate": 0.8966666666666666
+ },
+ {
+  "seed": "seed_1002",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.4111673938181163,
+  "FGC": 0.10183664997017888,
+  "BGC": 0.3093307438479374,
+  "agreement_rate": 0.72
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9416608821337517,
+  "FGC": 0.45177573538607796,
+  "BGC": 0.4898851467476737,
+  "agreement_rate": 0.9966666666666667
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.5515791489369865,
+  "FGC": 0.45745663976109036,
+  "BGC": 0.09412250917589612,
+  "agreement_rate": 0.8733333333333333
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8402746665453414,
+  "FGC": 0.008853923682518599,
+  "BGC": 0.8314207428628229,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9495054631105281,
+  "FGC": 0.32824865129690634,
+  "BGC": 0.6212568118136218,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9304488099712962,
+  "FGC": 0.6776641338566595,
+  "BGC": 0.25278467611463673,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9413973665592044,
+  "FGC": 0.1984130461728169,
+  "BGC": 0.7429843203863874,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5378589137803289,
+  "FGC": 0.18022142431755753,
+  "BGC": 0.35763748946277135,
+  "agreement_rate": 0.7366666666666667
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.273970198207753,
+  "FGC": 0.03577500129230192,
+  "BGC": 0.23819519691545107,
+  "agreement_rate": 0.6
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.42614210884198184,
+  "FGC": 0.13879987036189137,
+  "BGC": 0.2873422384800905,
+  "agreement_rate": 0.7333333333333333
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6888260379812694,
+  "FGC": 0.2591863048421273,
+  "BGC": 0.42963973313914217,
+  "agreement_rate": 0.8866666666666667
+ },
+ {
+  "seed": "seed_1003",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.40258371985944036,
+  "FGC": 0.09417126498727577,
+  "BGC": 0.30841245487216457,
+  "agreement_rate": 0.71
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.5934870904893987,
+  "FGC": 0.3515956424929619,
+  "BGC": 0.24189144799643683,
+  "agreement_rate": 0.7366666666666667
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.29178774246589534,
+  "FGC": 0.20653888421432443,
+  "BGC": 0.08524885825157096,
+  "agreement_rate": 0.5833333333333334
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.48816554807130047,
+  "FGC": 0.2694986501245335,
+  "BGC": 0.2186668979467669,
+  "agreement_rate": 0.7433333333333333
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.7085112096778445,
+  "FGC": 0.40778220896776746,
+  "BGC": 0.3007290007100771,
+  "agreement_rate": 0.86
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.5782976404420059,
+  "FGC": 0.35883274266231063,
+  "BGC": 0.21946489777969524,
+  "agreement_rate": 0.7966666666666666
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": -0.029812262589486254,
+  "FGC": -0.09037387175108903,
+  "BGC": 0.060561609161602775,
+  "agreement_rate": 0.25333333333333335
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.9163634448311223,
+  "FGC": 0.45869173579798705,
+  "BGC": 0.4576717090331352,
+  "agreement_rate": 0.9833333333333333
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.49083280310678196,
+  "FGC": 0.08084267291306219,
+  "BGC": 0.4099901301937197,
+  "agreement_rate": 0.8266666666666667
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.7752590063213962,
+  "FGC": 0.7149890036214674,
+  "BGC": 0.06027000269992865,
+  "agreement_rate": 0.9966666666666667
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.9246169237824999,
+  "FGC": 0.6959696433455217,
+  "BGC": 0.2286472804369782,
+  "agreement_rate": 0.9966666666666667
+ },
+ {
+  "seed": "seed_1004",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.7391557477487555,
+  "FGC": 0.4186960525204315,
+  "BGC": 0.32045969522832407,
+  "agreement_rate": 0.97
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9395992952136222,
+  "FGC": 0.44919610446243635,
+  "BGC": 0.4904031907511859,
+  "agreement_rate": 0.9933333333333333
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.5744870448830004,
+  "FGC": 0.4785659237637405,
+  "BGC": 0.09592112111925982,
+  "agreement_rate": 0.8966666666666666
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8407221809047754,
+  "FGC": 0.007679198489004299,
+  "BGC": 0.8330429824157711,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.94987839174339,
+  "FGC": 0.32703663324010596,
+  "BGC": 0.622841758503284,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9260855449668145,
+  "FGC": 0.6302649046199397,
+  "BGC": 0.29582064034687483,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9421805166882137,
+  "FGC": 0.19880462123732168,
+  "BGC": 0.743375895450892,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5589989964093849,
+  "FGC": 0.183744559328396,
+  "BGC": 0.37525443708098893,
+  "agreement_rate": 0.7533333333333333
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.2831967366411765,
+  "FGC": 0.03791316104418419,
+  "BGC": 0.24528357559699232,
+  "agreement_rate": 0.6133333333333333
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.44469869511725774,
+  "FGC": 0.14231062430204125,
+  "BGC": 0.3023880708152165,
+  "agreement_rate": 0.7466666666666667
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6966121141099421,
+  "FGC": 0.25997533013200336,
+  "BGC": 0.4366367839779387,
+  "agreement_rate": 0.8933333333333333
+ },
+ {
+  "seed": "seed_1005",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.4163178582392032,
+  "FGC": 0.10378728113323252,
+  "BGC": 0.3125305771059707,
+  "agreement_rate": 0.7233333333333334
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9450676123794741,
+  "FGC": 0.4504946571489658,
+  "BGC": 0.49457295523050837,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.48890525792532347,
+  "FGC": 0.39048189018894447,
+  "BGC": 0.09842336773637902,
+  "agreement_rate": 0.8066666666666666
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8373285303457342,
+  "FGC": 0.02183184010610514,
+  "BGC": 0.815496690239629,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9469695484070688,
+  "FGC": 0.34049935688641264,
+  "BGC": 0.6064701915206562,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9222070871850531,
+  "FGC": 0.5677247728890356,
+  "BGC": 0.3544823142960174,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9402039949340468,
+  "FGC": 0.1973501995691611,
+  "BGC": 0.7428537953648857,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5423803517838798,
+  "FGC": 0.18603307576114023,
+  "BGC": 0.3563472760227396,
+  "agreement_rate": 0.74
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.2792043730393729,
+  "FGC": 0.03977316529084057,
+  "BGC": 0.2394312077485323,
+  "agreement_rate": 0.6033333333333334
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.43265214520885953,
+  "FGC": 0.14008285127343814,
+  "BGC": 0.2925692939354214,
+  "agreement_rate": 0.7366666666666667
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6798148427130477,
+  "FGC": 0.26059876646932256,
+  "BGC": 0.4192160762437252,
+  "agreement_rate": 0.88
+ },
+ {
+  "seed": "seed_1006",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.39396250728067017,
+  "FGC": 0.09858620800234458,
+  "BGC": 0.29537629927832554,
+  "agreement_rate": 0.6966666666666667
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9465220340476347,
+  "FGC": 0.46613901329751334,
+  "BGC": 0.4803830207501214,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.6072625589982967,
+  "FGC": 0.5203415637502135,
+  "BGC": 0.08692099524808322,
+  "agreement_rate": 0.9333333333333333
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8424749454792253,
+  "FGC": 0.001097008118995605,
+  "BGC": 0.8413779373602297,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9516684491811259,
+  "FGC": 0.3172099637642006,
+  "BGC": 0.6344584854169254,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9365275466869416,
+  "FGC": 0.7124024360077252,
+  "BGC": 0.22412511067921642,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.9423669810046446,
+  "FGC": 0.1988978533955371,
+  "BGC": 0.7434691276091075,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5628770356504678,
+  "FGC": 0.18844011198992647,
+  "BGC": 0.3744369236605414,
+  "agreement_rate": 0.7566666666666667
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.26710066865003906,
+  "FGC": 0.043882808516580836,
+  "BGC": 0.2232178601334582,
+  "agreement_rate": 0.6
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.4373135683246756,
+  "FGC": 0.1474341004935846,
+  "BGC": 0.289879467831091,
+  "agreement_rate": 0.7466666666666667
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6966951875855362,
+  "FGC": 0.26143031518917037,
+  "BGC": 0.4352648723963658,
+  "agreement_rate": 0.8933333333333333
+ },
+ {
+  "seed": "seed_1007",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.38902641802693394,
+  "FGC": 0.10166518299331355,
+  "BGC": 0.2873612350336204,
+  "agreement_rate": 0.6966666666666667
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.6658628542370348,
+  "FGC": 0.38502871650136306,
+  "BGC": 0.28083413773567173,
+  "agreement_rate": 0.7933333333333333
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.3464579153766726,
+  "FGC": 0.23559720591126135,
+  "BGC": 0.11086070946541124,
+  "agreement_rate": 0.6366666666666667
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.5292211204858163,
+  "FGC": 0.2773516122463378,
+  "BGC": 0.25186950823947846,
+  "agreement_rate": 0.78
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.7414027651929723,
+  "FGC": 0.42169392384837723,
+  "BGC": 0.31970884134459515,
+  "agreement_rate": 0.8866666666666667
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.5459851528459669,
+  "FGC": 0.3169991864747496,
+  "BGC": 0.22898596637121726,
+  "agreement_rate": 0.7833333333333333
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.011278937545271915,
+  "FGC": -0.08177803022328801,
+  "BGC": 0.09305696776855993,
+  "agreement_rate": 0.2866666666666667
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.9000539192713052,
+  "FGC": 0.4522806301889854,
+  "BGC": 0.4477732890823198,
+  "agreement_rate": 0.99
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.43229729095375985,
+  "FGC": 0.08733736845327458,
+  "BGC": 0.3449599225004853,
+  "agreement_rate": 0.76
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.7505781070563821,
+  "FGC": 0.5542992258187667,
+  "BGC": 0.19627888123761547,
+  "agreement_rate": 0.9933333333333333
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.910683592429627,
+  "FGC": 0.6193008028138062,
+  "BGC": 0.2913827896158208,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1008",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.6640413372395777,
+  "FGC": 0.3482215217693716,
+  "BGC": 0.3158198154702061,
+  "agreement_rate": 0.92
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "ZIC",
+  "E": 0.9426304965791921,
+  "FGC": 0.4620499192214173,
+  "BGC": 0.4805805773577747,
+  "agreement_rate": 0.9966666666666667
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "Boulware",
+  "E": 0.5755374948882251,
+  "FGC": 0.49216109179057316,
+  "BGC": 0.08337640309765199,
+  "agreement_rate": 0.9
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "Linear",
+  "E": 0.8411696952642094,
+  "FGC": 0.0060383125044128965,
+  "BGC": 0.8351313827597966,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "Conceder",
+  "E": 0.9504004918293962,
+  "FGC": 0.3240345577455694,
+  "BGC": 0.6263659340838269,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "TitForTat",
+  "E": 0.9342526820264854,
+  "FGC": 0.7038064310202634,
+  "BGC": 0.23044625100622193,
+  "agreement_rate": 1.0
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "farmer",
+  "opponent": "HardballBuyer",
+  "E": 0.941807588055352,
+  "FGC": 0.19861815692089083,
+  "BGC": 0.7431894311344612,
+  "agreement_rate": 0.9733333333333334
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "buyer",
+  "opponent": "ZIC",
+  "E": 0.5595407942793899,
+  "FGC": 0.18801573942967312,
+  "BGC": 0.3715250548497167,
+  "agreement_rate": 0.7533333333333333
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "buyer",
+  "opponent": "Boulware",
+  "E": 0.3111059291755877,
+  "FGC": 0.05165118264611145,
+  "BGC": 0.25945474652947625,
+  "agreement_rate": 0.6333333333333333
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "buyer",
+  "opponent": "Linear",
+  "E": 0.46182091379722695,
+  "FGC": 0.1510344813427299,
+  "BGC": 0.310786432454497,
+  "agreement_rate": 0.7633333333333333
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "buyer",
+  "opponent": "Conceder",
+  "E": 0.6856887549716291,
+  "FGC": 0.26135390201674263,
+  "BGC": 0.4243348529548865,
+  "agreement_rate": 0.8833333333333333
+ },
+ {
+  "seed": "seed_1009",
+  "learned": "buyer",
+  "opponent": "TitForTat",
+  "E": 0.44623617090383405,
+  "FGC": 0.12190940154481399,
+  "BGC": 0.32432676935902005,
+  "agreement_rate": 0.7466666666666667
+ }
+]

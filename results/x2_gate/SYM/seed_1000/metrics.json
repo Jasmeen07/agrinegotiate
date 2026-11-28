@@ -1,0 +1,43 @@
+{
+ "seed": 1000,
+ "scenario": "SYM",
+ "agent_steps": 562173,
+ "seconds": 148.4,
+ "final_checkpoint_1000_episodes": {
+  "episodes": 1000,
+  "episodes_no_trade_possible": 0,
+  "E": 0.8488933467427279,
+  "FGC": 0.2120877910084989,
+  "BGC": 0.636805555734229,
+  "BGC_net_of_fees": 0.636805555734229,
+  "S_F": 0.24984032661146047,
+  "agreement_rate": 0.928,
+  "deals": 928,
+  "fees_over_gstar": 0.0,
+  "failed_accepts_per_episode": 0.635,
+  "decay_loss": 0.0,
+  "fallback_rate": 0.072,
+  "price_share": 0.5557300355293792,
+  "phi_mean": 0.28325234556197487,
+  "phi_median": 0.237186610180739,
+  "phi_p10": 0.057106686111033034,
+  "nash_distance": 0.2588450819791327,
+  "low_share_deal_rate": 0.18857758620689655,
+  "time_to_agreement": 5.172413793103448,
+  "j_c": 0.0
+ },
+ "last10_checkpoint_mean": {
+  "E": 0.8322052253475605,
+  "FGC": 0.20929793597848922,
+  "BGC": 0.6229072893690712,
+  "S_F": 0.2515554773606275,
+  "agreement_rate": 0.9206666666666667,
+  "price_share": 0.5542457948966277,
+  "fees_over_gstar": 0.0,
+  "lam_fair": 0.0,
+  "j_c": 0.0,
+  "time_to_agreement": 5.944770577379133,
+  "phi_mean": 0.2842215318347459
+ },
+ "last10_checkpoints_used": 10
+}

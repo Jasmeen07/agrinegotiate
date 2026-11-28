@@ -1,0 +1,62 @@
+{
+ "scenario": {
+  "name": "PERISH-HET",
+  "n_farmers": 1,
+  "n_buyers": 1,
+  "capacity": 1,
+  "T": 30,
+  "rho": 0.97,
+  "deadline_lo": null,
+  "deadline_hi": null,
+  "h_farmer": 0.0,
+  "base_cost": 0.002,
+  "theta": 0.45,
+  "theta_spread": 0.08,
+  "o_b": 0.1,
+  "margin_lo": 0.03,
+  "margin_hi": 0.4,
+  "level_lo": 0.7,
+  "level_hi": 1.1,
+  "sigma_info": 0.0,
+  "duty": 1.0,
+  "outage_len": 2.0,
+  "ttl": 6,
+  "drop_mode": false,
+  "n_bins": 21,
+  "p_lo": 0.2,
+  "p_hi": 1.2
+ },
+ "ppo": {
+  "iters": 150,
+  "episodes_per_iter": 256,
+  "lr": 0.0003,
+  "gae_lambda": 0.95,
+  "clip": 0.2,
+  "ent_start": 0.01,
+  "ent_end": 0.001,
+  "vf_coef": 0.5,
+  "max_grad_norm": 0.5,
+  "epochs": 4,
+  "minibatches": 4,
+  "hidden": 64,
+  "reward_scale": 5.0,
+  "mix_scripted": 0.3,
+  "mix_pool": [
+   "Boulware",
+   "Linear",
+   "Conceder",
+   "TitForTat"
+  ],
+  "eval_every": 10,
+  "eval_episodes": 300,
+  "final_eval_episodes": 1000,
+  "delay_aware": true,
+  "recurrent": false,
+  "walk_bias": -3.0
+ },
+ "seed": 1005,
+ "adaptive_fee": false,
+ "mechanism": {
+  "floor_kappa": 0.5
+ }
+}
