@@ -1,0 +1,12 @@
+gymnasium==1.4.0
+numpy==2.5.3
+pandas==3.0.5
+pettingzoo==1.27.0
+pytest==9.1.1
+PyYAML==6.0.3
+scipy==1.18.1
+torch==2.15.0
+fastapi
+uvicorn
+httpx
+matplotlib
